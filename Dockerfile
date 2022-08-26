@@ -15,8 +15,10 @@ RUN pip install -r requirements_dev.txt
 ### Final image
 FROM python:3.9-slim
 
+# add user group for saleor
 RUN groupadd -r saleor && useradd -r -g saleor saleor
 
+# get required packages
 RUN apt-get update \
   && apt-get install -y \
   libcairo2 \
@@ -35,6 +37,7 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+# static + media files, set permissions to saleor
 RUN mkdir -p /app/media /app/static \
   && chown -R saleor:saleor /app/
 
@@ -65,4 +68,5 @@ GraphQL, Django, and ReactJS."                                                  
       org.opencontainers.image.authors="Saleor Commerce (https://saleor.io)"           \
       org.opencontainers.image.licenses="BSD 3"
 
+# expose on port using gunicorn
 CMD ["gunicorn", "--bind", ":8000", "--workers", "4", "--worker-class", "saleor.asgi.gunicorn_worker.UvicornWorker", "saleor.asgi:application"]
