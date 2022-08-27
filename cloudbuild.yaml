@@ -1,22 +1,22 @@
 steps:
-  # STEP 0: build image
+  # STEP 0: build image. pushes to artifact registry under proj id
   - name: gcr.io/cloud-builders/docker
     args:
       ["build", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}", "."]
   # STEP 1: deploy to cloud run
-  - name: "gcr.io/cloud-builders/gcloud"
-    args:
-      [
-        "run",
-        "deploy",
-        "${_SERVICE_NAME}",
-        "--image",
-        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}",
-        "--region",
-        "${_REGION}",
-        "--platform",
-        "managed",
-        "--allow-unauthenticated",
-      ]
+  # - name: "gcr.io/cloud-builders/gcloud"
+  #   args:
+  #     [
+  #       "run",
+  #       "deploy",
+  #       "${_SERVICE_NAME}",
+  #       "--image",
+  #       "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}",
+  #       "--region",
+  #       "${_REGION}",
+  #       "--platform",
+  #       "managed",
+  #       "--allow-unauthenticated",
+  #     ]
 images:
   - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}"
