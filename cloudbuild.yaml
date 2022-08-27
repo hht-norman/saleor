@@ -18,3 +18,5 @@ steps:
         "managed",
         "--allow-unauthenticated",
       ]
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}"
