@@ -1,9 +1,16 @@
 steps:
-  # STEP 0: build image. pushes to artifact registry under proj id
+  # STEP 0: build image
   - name: "gcr.io/cloud-builders/docker"
     args:
       ["build", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}/test_image:${SHORT_SHA}", "."]
-  # STEP 1: deploy to cloud run
+  # STEP 1: push container to artifact registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}/test_image:{SHORT_SHA}",
+      ]
+  # STEP 2: deploy to cloud run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
